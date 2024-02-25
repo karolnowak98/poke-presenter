@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual.Models;
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.Data;
-using GlassyCode.PokemonPresenter.Scripts.Core.Utils;
+using GlassyCode.PokemonPresenter.Core.Api.AudioVisual.Models;
+using GlassyCode.PokemonPresenter.Core.Api.Data;
+using GlassyCode.PokemonPresenter.Core.Utils;
 using ModestTree;
 using UnityEngine;
 using Zenject;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
+namespace GlassyCode.PokemonPresenter.Core.Api.Logic
 {
     public class ApiController : MonoBehaviour
     {
         private ApiConfig _apiConfig;
-        private readonly List<PokemonModel> _pokemonModels = new();
+        private List<PokemonModel> _pokemonModels = new();
 
         public event Action OnStartDownloading;
-        public event Action<List<PokemonModel>> OnFinishDownloading;
+        public event Action<PokemonModel[]> OnFinishDownloading;
         public event Action<float> OnDownloadingProgress;
         
         [Inject]
@@ -56,7 +56,9 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
             }
             else
             {
-                OnFinishDownloading?.Invoke(_pokemonModels);
+                OnFinishDownloading?.Invoke(_pokemonModels.ToArray());
+                _pokemonModels = null;
+                OnDownloadingProgress = null;
             }
         }
     }

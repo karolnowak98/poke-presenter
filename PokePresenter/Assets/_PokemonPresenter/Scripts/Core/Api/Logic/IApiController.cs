@@ -1,4 +1,4 @@
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
+namespace GlassyCode.PokemonPresenter.Core.Api.Logic
 {
     public interface IApiController
     {

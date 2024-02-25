@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Utils
+namespace GlassyCode.PokemonPresenter.Core.Utils
 {
     public static class WebExtensions
     {

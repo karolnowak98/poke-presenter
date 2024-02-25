@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual.Models;
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic;
+using GlassyCode.PokemonPresenter.Core.Api.AudioVisual.Models;
+using GlassyCode.PokemonPresenter.Core.Api.Logic;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using Utils_Canvas = GlassyCode.PokemonPresenter.Scripts.Core.Utils.Canvas;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
+namespace GlassyCode.PokemonPresenter.Core.Api.AudioVisual
 {
-    public class PokemonCanvas : Utils_Canvas
+    public class PokemonCanvas : MonoBehaviour
     {
         [SerializeField] private PokemonDetailsWindow _pokemonDetailsWindow;
         [SerializeField] private PokemonGridPanel _pokemonGridPanel;
@@ -38,7 +37,7 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
             _downloadingBar.gameObject.SetActive(true);
         }
 
-        private void HideDownloadingBar(List<PokemonModel> pokemonData)
+        private void HideDownloadingBar(PokemonModel[] pokemonData)
         {
             _downloadingBar.gameObject.SetActive(false);
         }

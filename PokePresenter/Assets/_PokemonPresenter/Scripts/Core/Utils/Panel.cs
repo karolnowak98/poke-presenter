@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Utils
+namespace GlassyCode.PokemonPresenter.Core.Utils
 {
     public abstract class Panel : MonoBehaviour
     {

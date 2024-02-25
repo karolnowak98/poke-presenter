@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual.Models;
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic;
-using GlassyCode.PokemonPresenter.Scripts.Core.Utils;
+using GlassyCode.PokemonPresenter.Core.Api.AudioVisual.Models;
+using GlassyCode.PokemonPresenter.Core.Api.Logic;
+using GlassyCode.PokemonPresenter.Core.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
+namespace GlassyCode.PokemonPresenter.Core.Api.AudioVisual
 {
     public class PokemonGridPanel : Panel
     {
@@ -14,14 +14,14 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
         [SerializeField] private RectTransform _contentTransform;
         [SerializeField] private GameObject _viewPrefab;
         [SerializeField] private int _visibleViewsNumber;
-        
-        private List<PokemonModel> _models = new();
+
+        private PokemonModel[] _models;
         private readonly List<GameObject> _views = new();
         private int _firstViewsIndex;
         private int _lastViewsIndex;
         private ApiController _apiController;
 
-        public int CurrentModelsNumber => _models.Count;
+        public int CurrentModelsNumber => _models.Length;
 
         [Inject]
         private void Construct(ApiController apiController)
@@ -29,20 +29,12 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
             _apiController = apiController;
 
             _apiController.OnFinishDownloading += InitModels;
+            _scrollRect.onValueChanged.AddListener(OnScrollValueChanged);
         }
 
         private void OnDestroy()
         {
             _apiController.OnFinishDownloading -= InitModels;
-        }
-
-        private void OnEnable()
-        {
-            _scrollRect.onValueChanged.AddListener(OnScrollValueChanged);
-        }
-        
-        private void OnDisable()
-        {
             _scrollRect.onValueChanged.RemoveAllListeners();
         }
         
@@ -51,7 +43,7 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
             UpdateViews();
         }
 
-        private void InitModels(List<PokemonModel> pokemonModels)
+        private void InitModels(PokemonModel[] pokemonModels)
         {
             _models = pokemonModels;
 
@@ -63,7 +55,7 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
             _firstViewsIndex = 0;
             _lastViewsIndex = _visibleViewsNumber;
             
-            var viewsNumber = Mathf.Min(_visibleViewsNumber, _models.Count);
+            var viewsNumber = Mathf.Min(_visibleViewsNumber, _models.Length);
             
             for (var i = 0; i < viewsNumber; i++)
             {

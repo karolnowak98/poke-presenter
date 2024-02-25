@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Data
+namespace GlassyCode.PokemonPresenter.Core.Api.Data
 {
     [CreateAssetMenu(menuName = "Configs/Api Config", fileName = "Api Config")]
     public class ApiConfig : ScriptableObject

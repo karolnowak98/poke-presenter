@@ -1,6 +1,6 @@
-using GlassyCode.PokemonPresenter.Scripts.Core.Utils;
+using GlassyCode.PokemonPresenter.Core.Utils;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
+namespace GlassyCode.PokemonPresenter.Core.Api.AudioVisual
 {
     public class PokemonDetailsWindow : Window
     {

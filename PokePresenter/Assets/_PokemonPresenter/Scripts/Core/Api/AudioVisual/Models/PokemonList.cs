@@ -1,6 +1,6 @@
 using System;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual.Models
+namespace GlassyCode.PokemonPresenter.Core.Api.AudioVisual.Models
 {
     [Serializable]
     public struct PokemonList

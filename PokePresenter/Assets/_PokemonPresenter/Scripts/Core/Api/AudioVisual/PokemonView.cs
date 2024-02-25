@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
+namespace GlassyCode.PokemonPresenter.Core.Api.AudioVisual
 {
     public class PokemonView : MonoBehaviour
     {

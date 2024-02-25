@@ -1,8 +1,8 @@
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.Data;
+using GlassyCode.PokemonPresenter.Core.Api.Data;
 using UnityEngine;
 using Zenject;
 
-namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
+namespace GlassyCode.PokemonPresenter.Core.Api.Logic
 {
     public class ApiInstaller : MonoInstaller
     {

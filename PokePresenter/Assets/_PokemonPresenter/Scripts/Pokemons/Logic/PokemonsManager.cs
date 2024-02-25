@@ -1,4 +1,4 @@
-namespace GlassyCode.PokemonPresenter.Scripts.Pokemons.Logic
+namespace GlassyCode.PokemonPresenter.Pokemons.Logic
 {
     public class PokemonsManager
     {
