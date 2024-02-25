@@ -9,6 +9,6 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Data
         //That's more testable way
         //For my case I just created const
         
-        public const string GetPokesEndpoint = "https://pokeapi.co/api/v2/pokemon?limit=20";
+        public const string GetPokesEndpoint = "https://pokeapi.co/api/v2/pokemon";
     }
 }

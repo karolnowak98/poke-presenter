@@ -9,11 +9,11 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Utils
         [SerializeField] private TextMeshProUGUI _itemModelsNumberTmp;
         [SerializeField] private Button _addRandomModelBtn;
         [SerializeField] private Button _removeCheckedModelsBtn;
-        [SerializeField] private GlassyScrollView _glassyScrollView;
+        //[SerializeField] private GlassyScrollView _glassyScrollView;
 
         private void Start()
         {
-            _itemModelsNumberTmp.text = $"Models number: {_glassyScrollView.CurrentModelsNumber}";
+            //_itemModelsNumberTmp.text = $"Models number: {_glassyScrollView.CurrentModelsNumber}";
         }
 
         private void OnEnable()

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual.Models;
 using GlassyCode.PokemonPresenter.Scripts.Core.Api.Data;
 using GlassyCode.PokemonPresenter.Scripts.Core.Utils;
 using ModestTree;
@@ -10,8 +12,11 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
     public class ApiController : MonoBehaviour
     {
         private ApiConfig _apiConfig;
+        private readonly List<PokemonModel> _pokemonModels = new();
 
-        public event Action<PokemonData[]> OnPokemonDataProcessed;
+        public event Action OnStartDownloading;
+        public event Action<List<PokemonModel>> OnFinishDownloading;
+        public event Action<float> OnDownloadingProgress;
         
         [Inject]
         private void Construct(ApiConfig apiConfig)
@@ -22,6 +27,7 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
         [ContextMenu("Download Pokemons")]
         public void DownloadPokemonData()
         {
+            OnStartDownloading?.Invoke();
             const string endpoint = ApiConfig.GetPokesEndpoint;
             var coroutine = WebExtensions.GetJsonDataAsync(endpoint, ProcessPokemonData);
             StartCoroutine(coroutine);
@@ -29,24 +35,29 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic
         
         private void ProcessPokemonData(string json)
         {
-            if (json == null) return;
+            if (json is null || json.IsEmpty()) return;
 
-            var pokemonData = ParsePokemonJson(json);
+            var pokemonArray = JsonUtility.FromJson<PokemonList>(json);
 
-            if (pokemonData.IsEmpty())
+            if (pokemonArray.results == null)
             {
-                Debug.LogWarning("Pokemon array is empty for some reason!");
+                Debug.LogWarning("Pokemon list is empty for some reason!");
                 return;
             }
             
-            OnPokemonDataProcessed?.Invoke(pokemonData);
-        }
-        
-        private static PokemonData[] ParsePokemonJson(string json)
-        {
-            var pokemonArray = JsonUtility.FromJson<PokemonData[]>(json);
-            
-            return pokemonArray ?? Array.Empty<PokemonData>();
+            _pokemonModels.AddRange(pokemonArray.results);
+            var progress = (float) _pokemonModels.Count / pokemonArray.count;
+            OnDownloadingProgress?.Invoke(progress);
+
+            if (!string.IsNullOrEmpty(pokemonArray.next))
+            {
+                var nextPageCoroutine = WebExtensions.GetJsonDataAsync(pokemonArray.next, ProcessPokemonData);
+                StartCoroutine(nextPageCoroutine);
+            }
+            else
+            {
+                OnFinishDownloading?.Invoke(_pokemonModels);
+            }
         }
     }
 }

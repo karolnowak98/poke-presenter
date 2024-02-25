@@ -1,6 +1,8 @@
-using GlassyCode.PokemonPresenter.Scripts.Core.Api.Data;
+using System.Collections.Generic;
+using GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual.Models;
 using GlassyCode.PokemonPresenter.Scripts.Core.Api.Logic;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Utils_Canvas = GlassyCode.PokemonPresenter.Scripts.Core.Utils.Canvas;
 
@@ -10,6 +12,7 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
     {
         [SerializeField] private PokemonDetailsWindow _pokemonDetailsWindow;
         [SerializeField] private PokemonGridPanel _pokemonGridPanel;
+        [SerializeField] private Slider _downloadingBar;
         
         private ApiController _apiController;
 
@@ -18,22 +21,31 @@ namespace GlassyCode.PokemonPresenter.Scripts.Core.Api.AudioVisual
         {
             _apiController = apiController;
 
-            _apiController.OnPokemonDataProcessed += UpdatePokemonGrid;
+            _apiController.OnStartDownloading += ShowDownloadingBar;
+            _apiController.OnFinishDownloading += HideDownloadingBar;
+            _apiController.OnDownloadingProgress += UpdateDownloadingBar;
         }
 
         private void OnDestroy()
         {
-            _apiController.OnPokemonDataProcessed -= UpdatePokemonGrid;
+            _apiController.OnStartDownloading -= ShowDownloadingBar;
+            _apiController.OnFinishDownloading -= HideDownloadingBar;
+            _apiController.OnDownloadingProgress -= UpdateDownloadingBar;
+        }
+        
+        private void ShowDownloadingBar()
+        {
+            _downloadingBar.gameObject.SetActive(true);
         }
 
-        private void UpdatePokemonGrid(PokemonData[] pokemonData)
+        private void HideDownloadingBar(List<PokemonModel> pokemonData)
         {
-            
+            _downloadingBar.gameObject.SetActive(false);
         }
-
-        private void ResetPokemonGrid()
+        
+        private void UpdateDownloadingBar(float value)
         {
-            
+            _downloadingBar.value = value;
         }
     }
 }
