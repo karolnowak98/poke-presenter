@@ -1,10 +1,10 @@
-using GlassyCode.PokemonPresenter.Core.UI;
-using GlassyCode.PokemonPresenter.Pokemons.Data.Models;
-using GlassyCode.PokemonPresenter.Pokemons.Logic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Zenject;
+using GlassyCode.PokemonPresenter.Core.UI;
+using GlassyCode.PokemonPresenter.Pokemons.Data.Models;
+using GlassyCode.PokemonPresenter.Pokemons.Logic;
 
 namespace GlassyCode.PokemonPresenter.Pokemons.AudioVisual
 {
