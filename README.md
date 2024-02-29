@@ -1,2 +1,2 @@
 # poke-presenter
-Poke presenter is application that presents all pokemons and it details from PokeAPI.
+Poke Presenter is an application presenting all Pokemon and Pokemon details from PokeAPI.
