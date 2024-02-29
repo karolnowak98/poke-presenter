@@ -74,5 +74,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a5b202de3d94fe1808968ac8c27286e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _apiConnectionPrefab: {fileID: 2853170793065227610, guid: 5bdec67aba1ff0c4a80a07bfa26aa0b6, type: 3}
-  _apiConfig: {fileID: 11400000, guid: 2a7c35d89b76f7441bb5ab8e8b99f331, type: 2}
+  _apiPrefab: {fileID: 2853170793065227610, guid: 5bdec67aba1ff0c4a80a07bfa26aa0b6, type: 3}
+  _pokeApiConfig: {fileID: 11400000, guid: 2a7c35d89b76f7441bb5ab8e8b99f331, type: 2}
