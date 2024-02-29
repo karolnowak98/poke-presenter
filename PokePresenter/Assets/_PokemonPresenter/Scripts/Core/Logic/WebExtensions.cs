@@ -35,14 +35,13 @@ namespace GlassyCode.PokemonPresenter.Core.Logic
             {
                 var texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
                 var trueColorTexture = new Texture2D(texture.width, texture.height, TextureFormat.ARGB32, true);
+                
                 trueColorTexture.SetPixels(texture.GetPixels());
                 trueColorTexture.Apply();
-
                 trueColorTexture.filterMode = FilterMode.Trilinear;
-                trueColorTexture.anisoLevel = 32;
+                trueColorTexture.anisoLevel = 16;
                 trueColorTexture.wrapMode = TextureWrapMode.Clamp;
-                trueColorTexture.Apply();
-
+                
                 onSuccess?.Invoke(trueColorTexture);
             }
             else
