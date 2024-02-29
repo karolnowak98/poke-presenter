@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GlassyCode.PokemonPresenter.Core.UI;
 using GlassyCode.PokemonPresenter.Pokemons.Data.Models;
 using GlassyCode.PokemonPresenter.Pokemons.Logic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -13,12 +14,12 @@ namespace GlassyCode.PokemonPresenter.Pokemons.AudioVisual
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private RectTransform _contentTransform;
         [SerializeField] private GameObject _viewPrefab;
-        [SerializeField] private int _visibleViewsNumber;
+        [SerializeField, Min(0)] private int _visibleViewsNumber;
 
         private readonly List<GameObject> _views = new();
         private PokemonModel[] _models = {};
-        private int _firstViewsIndex;
-        private int _lastViewsIndex;
+        private int _firstVisibleViewIndex;
+        private int _lastVisibleViewsIndex;
         private IPokeApiController _pokeApiController;
 
         private int CurrentModelsNumber => _models.Length;
@@ -48,73 +49,89 @@ namespace GlassyCode.PokemonPresenter.Pokemons.AudioVisual
 
         private void OnScrollValueChanged(Vector2 value)
         {
-            UpdateViews();
+            UpdatePokemonViews();
         }
 
         private void InitModels(PokemonModel[] pokemonModels)
         {
             _models = pokemonModels;
 
-            InitViews();
+            CreatePokemonViews();
         }
         
-        private void InitViews()
+        private void CreatePokemonViews()
         {
-            _firstViewsIndex = 0;
-            _lastViewsIndex = _visibleViewsNumber;
+            _firstVisibleViewIndex = 0;
+            _lastVisibleViewsIndex = Mathf.Min(_visibleViewsNumber, CurrentModelsNumber);
             
-            var viewsNumber = Mathf.Min(_visibleViewsNumber, _models.Length);
-            
-            for (var i = 0; i < viewsNumber; i++)
+            for (var i = _firstVisibleViewIndex; i < _lastVisibleViewsIndex; i++)
             {
-                CreateItemView(_models[i]);
+                CreatePokemonView(_models[i]);
             }
         }
 
-        private void UpdateViews()
+        private void UpdatePokemonViews()
         {
-            DestroyViews();
             UpdateViewsRange();
 
-            for (var i = _firstViewsIndex; i < _lastViewsIndex; i++)
+            var viewIndex = 0;
+
+            for (var i = _firstVisibleViewIndex; i < _lastVisibleViewsIndex; i++)
             {
-                CreateItemView(_models[i]);
+                if (!IsViewCreated(viewIndex))
+                {
+                    CreatePokemonView(_models[i]);
+                }
+                
+                UpdateView(_views[viewIndex], _models[i]);
+                viewIndex++;
             }
         }
 
-        private void DestroyViews()
+        private void UpdateView(GameObject viewGameObject, PokemonModel model)
         {
-            foreach (var viewGameObject in _views)
+            if (!viewGameObject.TryGetComponent<PokemonView>(out var pokemonView))
             {
+                Debug.LogError("Failed to get PokemonView component on the instantiated prefab.");
                 Destroy(viewGameObject);
+                return;
             }
-            
-            _views.Clear();
+
+            pokemonView.OpenDetailsWindowBtn.onClick.RemoveAllListeners();
+            model.NameToShow = model.name.FirstCharacterToUpper().Replace("-", " ");
+            pokemonView.PokemonNameTmp.text = model.NameToShow;
+            pokemonView.OpenDetailsWindowBtn.onClick.AddListener(() => OpenPokemonDetailsWindow(model.name));
+        }
+
+        private bool IsViewCreated(int viewIndex)
+        {
+            return _views.Count > viewIndex;
         }
         
         private void UpdateViewsRange()
         {
             var scrollPos = _scrollRect.verticalNormalizedPosition;
-            var visibleModelsNumber = CurrentModelsNumber - _visibleViewsNumber;
+            var remainingModels = CurrentModelsNumber - _visibleViewsNumber;
     
-            _firstViewsIndex = Mathf.Clamp((int)((1 - scrollPos) * visibleModelsNumber), 0, Mathf.Max(0, visibleModelsNumber));
-            _lastViewsIndex = Mathf.Min(_firstViewsIndex + _visibleViewsNumber, CurrentModelsNumber);
+            _firstVisibleViewIndex = Mathf.Clamp((int)((1 - scrollPos) * remainingModels), 0, Mathf.Max(0, remainingModels));
+            _lastVisibleViewsIndex = Mathf.Min(_firstVisibleViewIndex + _visibleViewsNumber, CurrentModelsNumber);
         }
 
-        private void CreateItemView(PokemonModel model)
+        private void CreatePokemonView(PokemonModel model)
         {
-            var newItem = Instantiate(_viewPrefab, _contentTransform);
+            var newPokemonView = Instantiate(_viewPrefab, _contentTransform);
             
-            if (!newItem.TryGetComponent<PokemonView>(out var itemView))
+            if (!newPokemonView.TryGetComponent<PokemonView>(out var pokemonView))
             {
-                Debug.LogError("Failed to get ItemView component on the instantiated prefab.");
-                Destroy(newItem);
+                Debug.LogError("Failed to get PokemonView component on the instantiated prefab.");
+                Destroy(newPokemonView);
                 return;
             }
 
-            itemView.PokemonNameTmp.text = model.name;
-            itemView.OpenDetailsWindowBtn.onClick.AddListener(() => OpenPokemonDetailsWindow(model.name));
-            _views.Add(newItem);
+            model.NameToShow = model.name.FirstCharacterToUpper().Replace("-", " ");
+            pokemonView.PokemonNameTmp.text = model.NameToShow;
+            pokemonView.OpenDetailsWindowBtn.onClick.AddListener(() => OpenPokemonDetailsWindow(model.name));
+            _views.Add(newPokemonView);
         }
 
         private void OpenPokemonDetailsWindow(string pokemonName)

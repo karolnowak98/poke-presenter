@@ -37,14 +37,15 @@ namespace GlassyCode.PokemonPresenter.Pokemons.AudioVisual
         
         private void UpdateDetailsWindow(PokemonDetails pokemonDetails)
         {
-            _frontImage.texture = pokemonDetails.FrontTexture2D;
-            _backImage.texture = pokemonDetails.BackTexture2D;
-            _nameText.text = $"{pokemonDetails.name}".FirstCharacterToUpper();
+            SetImage(pokemonDetails.BackTexture2D, _backImage);
+            SetImage(pokemonDetails.FrontTexture2D, _frontImage);
+            
+            _nameText.text = $"{pokemonDetails.name}".FirstCharacterToUpper().Replace("-"," ");
             _heightText.text = $"{pokemonDetails.height}M";
             _weightText.text = $"{pokemonDetails.weight}KG";
         
             _abilitiesText.text = string.Join(", ", pokemonDetails.abilities.
-                Select(ability => ability.ability.name.FirstCharacterToUpper()));
+                Select(ability => ability.ability.name.FirstCharacterToUpper().Replace("-"," ")));
         
             for (var i = 0; i < _attributeUIArray.Length && i < pokemonDetails.stats.Length; i++)
             {
@@ -53,6 +54,18 @@ namespace GlassyCode.PokemonPresenter.Pokemons.AudioVisual
             }
             
             Show();
+        }
+        
+        private static void SetImage(Texture texture, RawImage image)
+        {
+            var isTexture = texture != null;
+            
+            image.gameObject.SetActive(isTexture);
+            
+            if (isTexture)
+            {
+                image.texture = texture;
+            }
         }
     }
 }

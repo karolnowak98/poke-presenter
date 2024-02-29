@@ -60,18 +60,34 @@ namespace GlassyCode.PokemonPresenter.Pokemons.Logic
         {
             var frontDownloaded = false;
             var backDownloaded = false;
+            var frontUrl = pokemonDetails.sprites.front_default;
+            var backUrl = pokemonDetails.sprites.back_default;
 
-            yield return StartCoroutine(WebExtensions.GetHighQualityTexture2D(pokemonDetails.sprites.front_default, texture =>
+            if (!frontUrl.IsEmpty())
             {
-                pokemonDetails.FrontTexture2D = texture;
+                yield return StartCoroutine(WebExtensions.GetHighQualityTexture2D(pokemonDetails.sprites.front_default, texture =>
+                {
+                    pokemonDetails.FrontTexture2D = texture;
+                    frontDownloaded = true;
+                }));
+            }
+            else
+            {
                 frontDownloaded = true;
-            }));
-
-            yield return StartCoroutine(WebExtensions.GetHighQualityTexture2D(pokemonDetails.sprites.back_default, texture =>
+            }
+            
+            if (!backUrl.IsEmpty())
             {
-                pokemonDetails.BackTexture2D = texture;
+                yield return StartCoroutine(WebExtensions.GetHighQualityTexture2D(pokemonDetails.sprites.back_default, texture =>
+                {
+                    pokemonDetails.BackTexture2D = texture;
+                    backDownloaded = true;
+                }));
+            }
+            else
+            {
                 backDownloaded = true;
-            }));
+            }
 
             yield return new WaitUntil(() => frontDownloaded && backDownloaded);
             OnFinishDownloadingPokemonDetails?.Invoke(pokemonDetails);

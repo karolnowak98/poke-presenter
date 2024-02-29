@@ -17,7 +17,7 @@ namespace GlassyCode.PokemonPresenter.Core.UI
             _cancelButton.onClick.AddListener(Hide);
         }
 
-        protected void Show() => gameObject.SetActive(true);
-        protected void Hide() => gameObject.SetActive(false);
+        protected virtual void Show() => gameObject.SetActive(true);
+        protected virtual void Hide() => gameObject.SetActive(false);
     }
 }

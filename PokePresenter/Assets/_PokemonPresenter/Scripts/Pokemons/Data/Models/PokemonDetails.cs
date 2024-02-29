@@ -17,6 +17,7 @@ namespace GlassyCode.PokemonPresenter.Pokemons.Data.Models
         //Downloaded
         public Texture2D FrontTexture2D;
         public Texture2D BackTexture2D;
+        public string NameToShow;
     }
 
     [Serializable]

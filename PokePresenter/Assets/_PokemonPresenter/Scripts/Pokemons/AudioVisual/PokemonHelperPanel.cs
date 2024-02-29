@@ -1,4 +1,3 @@
-using System;
 using GlassyCode.PokemonPresenter.Core.UI;
 using GlassyCode.PokemonPresenter.Pokemons.Data.Models;
 using GlassyCode.PokemonPresenter.Pokemons.Logic;

@@ -14,7 +14,10 @@ namespace GlassyCode.PokemonPresenter.Pokemons.Data.Models
     [Serializable]
     public struct PokemonModel
     {
+        //Json
         public string name;
         public string url;
+        
+        public string NameToShow;
     }
 }
