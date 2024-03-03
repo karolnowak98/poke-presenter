@@ -97,8 +97,7 @@ namespace GlassyCode.PokemonPresenter.Pokemons.Logic
         {
             _pokemonModels.Clear();
             OnStartDownloadingAllPokemons?.Invoke();
-            const string endpoint = PokeApiConfig.GetPokesEndpoint;
-            var coroutine = WebExtensions.GetJsonDataAsync(endpoint, ProcessPokemonsData);
+            var coroutine = WebExtensions.GetJsonDataAsync(PokeApiConfig.GetPokesEndpoint, ProcessPokemonsData);
             StartCoroutine(coroutine);
         }
         
